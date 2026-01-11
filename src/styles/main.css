@@ -1,0 +1,58 @@
+:root {
+    --border-width: 3px;
+    --white-key-width: 100px;
+    --black-key-width: 50px;
+}
+
+.note {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    border: var(--border-width) solid grey;
+    float: left;
+}
+
+.note-empty {
+    position: relative;
+    z-index: 1;
+    border: var(--border-width) solid rgb(0, 0, 0, 0);
+    width: var(--black-key-width);
+    height: 100px;
+}
+
+#keyboard {
+    position: relative;
+}
+
+#white_keys {
+    position: absolute;
+}
+
+.note-white {
+    background-color: white;
+    width: var(--white-key-width);
+    height: 200px;
+}
+
+#black_keys {
+    display: flex;
+    justify-content: space-between;
+    margin-left: calc(var(--white-key-width) - (var(--black-key-width) / 2) + var(--border-width));
+    /* width: 395px; */
+    width: calc(((var(--white-key-width) + var(--border-width) * 2) * 6) + (2 * (var(--black-key-width) / 2 + var(--border-width))));
+}
+
+.note-black {
+    width: var(--black-key-width);
+    height: 100px;
+    position: relative;
+    z-index: 1;
+    background-color: black;
+    color: white;
+}
+
+
+
+p {
+    padding: 5px;
+}
