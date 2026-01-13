@@ -22,6 +22,8 @@
 
 #keyboard {
     position: relative;
+    width: 900px;
+    height: 220px;
 }
 
 #white_keys {
@@ -51,7 +53,13 @@
     color: white;
 }
 
-
+#start {
+    border: none;
+    text-align: center;
+    display: block;
+    font-size: 16px;
+    cursor: pointer;
+}
 
 p {
     padding: 5px;
