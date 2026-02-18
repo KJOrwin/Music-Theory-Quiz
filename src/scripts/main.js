@@ -1,11 +1,4 @@
-// Colour example
-// const notes = score.notes("C4/q, D4/q, E4/q, F4/q");
-
-// // Make ONLY the first note red
-// notes[0].setStyle({
-//     fillStyle: "red",
-//     strokeStyle: "red"
-// });
+// TO DO: REMOVE VEXFLOW
 
 let notes = {
     "s": ["Cn4", "&#x2193;C", 261.63, "note-c"],
