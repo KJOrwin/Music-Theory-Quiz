@@ -1,29 +1,32 @@
 :root {
-    --border-width: 3px;
-    --white-key-width: 100px;
-    --black-key-width: 50px;
+    --white-key-height: 100%;
+    --black-key-height: calc(var(--white-key-height) * 0.5);
+    --white-key-width: 12.5%;
+    --black-key-width: calc(var(--white-key-width) * 0.5);
 }
 
 .note {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    border: var(--border-width) solid grey;
+    border: 3px solid grey;
     float: left;
 }
 
 .note-empty {
     position: relative;
     z-index: 1;
-    border: var(--border-width) solid rgb(0, 0, 0, 0);
+    border: 3px solid rgb(0, 0, 0, 0);
     width: var(--black-key-width);
-    height: 100px;
+    height: var(--black-key-height);
+}
+
+.stave-elements {
+    width: 20%;
 }
 
 #keyboard {
     position: relative;
-    width: 900px;
-    height: 220px;
 }
 
 #white_keys {
@@ -33,20 +36,20 @@
 .note-white {
     background-color: white;
     width: var(--white-key-width);
-    height: 200px;
+    height: var(--white-key-height);
 }
 
 #black_keys {
     display: flex;
     justify-content: space-between;
-    margin-left: calc(var(--white-key-width) - (var(--black-key-width) / 2) + var(--border-width));
-    /* width: 395px; */
-    width: calc(((var(--white-key-width) + var(--border-width) * 2) * 6) + (2 * (var(--black-key-width) / 2 + var(--border-width))));
+    margin-left: calc(var(--white-key-width) * 0.8);
+    width: calc(var(--white-key-width) * 6.4);
+    transform: translate(0%, -200%);
 }
 
 .note-black {
     width: var(--black-key-width);
-    height: 100px;
+    height: var(--black-key-height);
     position: relative;
     z-index: 1;
     background-color: black;

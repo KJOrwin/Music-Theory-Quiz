@@ -60,6 +60,7 @@ function loadStave() {
         stave.removeChild(stave.firstChild);
     }
     let img = document.createElement("img");
+    img.className = "stave-elements";
     img.src = "assets/images/clef-sig.png";
     stave.append(img.cloneNode(true));
     for (i = 0; i < randomNotes.length; i++) {
