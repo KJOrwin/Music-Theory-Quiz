@@ -41,7 +41,11 @@ let selected_key = "";
 let keyPressed = "";
 let failed = false;
 
-function startExercise() {
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function staveExercise(blank) {
     currentNote = 0;
     output.innerHTML = ""
     successText.innerHTML = ""
@@ -52,10 +56,10 @@ function startExercise() {
         output.innerHTML += notes[randomNote][NOTE_TEXT]
         if (i != 3) { output.innerHTML += ", " }
     }
-    loadStave()
+    loadStave(blank)
 }
 
-function loadStave() {
+function loadStave(blank) {
     while (stave.hasChildNodes()) {
         stave.removeChild(stave.firstChild);
     }
@@ -63,9 +67,55 @@ function loadStave() {
     img.className = "stave-elements";
     img.src = "assets/images/clef-sig.png";
     stave.append(img.cloneNode(true));
+    if (blank) {
+        img.src = "assets/images/blank.png";
+        for (i = 0; i < 4; i++) {
+            stave.append(img.cloneNode(true))
+        }
+        return;
+    }
     for (i = 0; i < randomNotes.length; i++) {
         img.src = "assets/images/" + notes[randomNotes[i]][NOTE_FILE];
         stave.append(img.cloneNode(true));
+    }
+}
+
+function audioExercise() {
+
+}
+
+async function playAudio() {
+    for (let i = 0; i < randomNotes.length; i++) {
+        console.log(notes[randomNotes[i]][NOTE_FREQ])
+        playNote(1, notes[randomNotes[i]][NOTE_FREQ])
+        await sleep(500);
+        playNote(0)
+        await sleep(500);
+    }
+}
+
+function pressKey(key) {
+    if (notes[key] != undefined && !keyPressed) {
+        selected_key = key
+        keyPressed = window.getComputedStyle(document.getElementById(notes[key][NOTE_VAR])).backgroundColor;
+        document.getElementById(notes[key][NOTE_VAR]).style.backgroundColor = "#c0c0c0";
+        playNote(1, notes[key][NOTE_FREQ]);
+        if (failed == false && randomNotes[0] && currentNote < 4) {
+            if (key == randomNotes[currentNote]) {
+                successText.innerHTML += "Success <br/>";
+                stave.children[currentNote + 1].style.backgroundColor = "#ddffdd";
+            } else {
+                successText.innerHTML += "Fail <br/>";
+                stave.children[currentNote + 1].style.backgroundColor = "#ffdddd";
+                successText.innerHTML += "<br/>You Lose!<br/>";
+                failed = true;
+            }
+
+            if (currentNote == 3 && failed == false) {
+                successText.innerHTML += "<br/>You Win!<br/>";
+            }
+            currentNote++;
+        }
     }
 }
 
@@ -80,31 +130,7 @@ function playNote(gainValue, frequencyValue = -1) {
 
 document.addEventListener("keydown", () => ctx.resume(), { once: true });
 
-document.addEventListener("keydown", (event) => {
-    if (notes[event.key] != undefined && !keyPressed) {
-        selected_key = event.key
-        keyPressed = window.getComputedStyle(document.getElementById(notes[event.key][NOTE_VAR])).backgroundColor;
-        document.getElementById(notes[event.key][NOTE_VAR]).style.backgroundColor = "#c0c0c0";
-        playNote(1, notes[event.key][NOTE_FREQ]);
-        if (failed == false && randomNotes[0] && currentNote < 4) {
-            if (event.key == randomNotes[currentNote]) {
-                successText.innerHTML += "Success <br/>";
-                stave.children[currentNote + 1].style.backgroundColor = "#ddffdd";                
-            } else {
-                successText.innerHTML += "Fail <br/>";
-                stave.children[currentNote + 1].style.backgroundColor = "#ffdddd"; 
-                successText.innerHTML += "<br/>You Lose!<br/>";
-                failed = true;
-            }
-
-            if (currentNote == 3 && failed == false) {
-                successText.innerHTML += "<br/>You Win!<br/>";
-            }
-            currentNote++;
-        }
-        
-    }
-});
+document.addEventListener("keydown", (event) => pressKey(event.key));
 
 document.addEventListener("keyup", (event) => {
     if (event.key == selected_key) {

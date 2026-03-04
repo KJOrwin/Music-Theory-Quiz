@@ -1,8 +1,34 @@
 :root {
-    --white-key-height: 100%;
+    --white-key-height: 200px;
     --black-key-height: calc(var(--white-key-height) * 0.5);
     --white-key-width: 12.5%;
     --black-key-width: calc(var(--white-key-width) * 0.5);
+}
+
+body {
+    height: 100vh;
+    background-image: linear-gradient(#7777ff, #7777ff, #330033);
+}
+
+.pad {
+    padding: 10px;
+}
+
+.center {
+    display: flex;
+    text-align: center;
+    place-items: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.unselectable {
+    user-select: none;
+}
+
+.row {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .note {
@@ -23,6 +49,10 @@
 
 .stave-elements {
     width: 20%;
+}
+
+#stave {
+    font-size: 0;
 }
 
 #keyboard {
@@ -56,12 +86,19 @@
     color: white;
 }
 
-#start {
+.start-button {
     border: none;
     text-align: center;
     display: block;
     font-size: 16px;
     cursor: pointer;
+}
+
+.audio-button {
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    text-align: center;
+    padding: 10px;
 }
 
 p {
