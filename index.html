@@ -17,21 +17,26 @@
         </div>
         <div class="col-sm-1"></div>
     </div>
-    <div class="row">
-        <div class="col-sm-2"></div>
+    <div class="row" id="actions">
+        <div class="col-sm-3"></div>
         <div class="col-sm-6" id="stave">
             <img class="stave-elements" src="assets/images/clef-sig.png">
-            <img class="stave-elements" src="assets/images/empty-stave.png">
-            <img class="stave-elements" src="assets/images/empty-stave.png">
-            <img class="stave-elements" src="assets/images/empty-stave.png">
-            <img class="stave-elements" src="assets/images/empty-stave.png">
+            <img class="stave-elements" id="n1" src="assets/images/empty-stave.png">
+            <img class="stave-elements" id="n2" src="assets/images/empty-stave.png">
+            <img class="stave-elements" id="n3" src="assets/images/empty-stave.png">
+            <img class="stave-elements" id="n4" src="assets/images/empty-stave.png">
         </div>
-        <div class="col-sm-2 center">
+        <div class="col-sm-1 center" style="display: none;">
             <button class="audio-button" onclick="playAudio()">
                 <img src="assets/images/audio-icon.png" alt="Play Audio">
             </button>
         </div>
-        <div class="col-sm-2"></div>
+        <div class="col-sm-1 center" style="display: none;">
+            <button class="audio-button" onclick="hint()">
+                <img src="assets/images/hint-icon.png" alt="Hint">
+            </button>
+        </div>
+        <div class="col-sm-3"></div>
     </div>
     <div class="row">
         <div class="col-sm-1"></div>
@@ -63,7 +68,7 @@
         </div>
         <div class="col-sm-1"></div>
     </div>
-    <p id="notes"></p>
-    <p id="success"></p> 
+    <p id="notes" style="color: lightgrey;"></p>
+    <p id="success" style="color: lightgrey;"></p> 
 </body>
 </html>

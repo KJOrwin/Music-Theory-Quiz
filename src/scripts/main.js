@@ -35,6 +35,7 @@ let currentNote = 0;
 
 let output = document.getElementById("notes");
 let stave = document.getElementById("stave");
+let actions = document.getElementById("actions");
 let successText = document.getElementById("success");
 
 let selected_key = "";
@@ -68,13 +69,23 @@ function loadStave(blank) {
     img.src = "assets/images/clef-sig.png";
     stave.append(img.cloneNode(true));
     if (blank) {
-        img.src = "assets/images/blank.png";
+        actions.children[0].className = "col-sm-2"
+        actions.children[2].style.display = "block"
+        actions.children[3].style.display = "block"
+        actions.children[4].className = "col-sm-2"
+        img.src = "assets/images/blank-black.png";
         for (i = 0; i < 4; i++) {
+            img.id = "n" + String(i + 1)
             stave.append(img.cloneNode(true))
         }
         return;
     }
+    actions.children[0].className = "col-sm-3"
+    actions.children[2].style.display = "none"
+    actions.children[3].style.display = "none"
+    actions.children[4].className = "col-sm-3"
     for (i = 0; i < randomNotes.length; i++) {
+        img.id = "n" + String(i + 1)
         img.src = "assets/images/" + notes[randomNotes[i]][NOTE_FILE];
         stave.append(img.cloneNode(true));
     }
@@ -94,7 +105,16 @@ async function playAudio() {
     }
 }
 
+function hint() {
+    let note = document.getElementById("n" + String(currentNote + 1));    
+    successText.innerHTML += "Hint <br/>";
+    note.src = "assets/images/" + notes[randomNotes[currentNote]][NOTE_FILE];
+    stave.children[currentNote + 1].style.backgroundColor = "#ffeecc";
+    currentNote++;
+}
+
 function pressKey(key) {
+    let note = document.getElementById("n" + String(currentNote + 1));
     if (notes[key] != undefined && !keyPressed) {
         selected_key = key
         keyPressed = window.getComputedStyle(document.getElementById(notes[key][NOTE_VAR])).backgroundColor;
@@ -103,9 +123,11 @@ function pressKey(key) {
         if (failed == false && randomNotes[0] && currentNote < 4) {
             if (key == randomNotes[currentNote]) {
                 successText.innerHTML += "Success <br/>";
+                note.src = "assets/images/" + notes[randomNotes[currentNote]][NOTE_FILE];
                 stave.children[currentNote + 1].style.backgroundColor = "#ddffdd";
             } else {
                 successText.innerHTML += "Fail <br/>";
+                note.src = "assets/images/" + notes[randomNotes[currentNote]][NOTE_FILE];
                 stave.children[currentNote + 1].style.backgroundColor = "#ffdddd";
                 successText.innerHTML += "<br/>You Lose!<br/>";
                 failed = true;
