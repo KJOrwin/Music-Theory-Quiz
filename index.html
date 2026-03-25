@@ -1,3 +1,11 @@
+<!--
+    Add a next button beside the stave (replace hint button)
+    decipher imported file
+    make the checkboxes do stuff
+    make it look good - remove testing text
+    add comments
+    clean up code
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +21,7 @@
     <div class="row">
         <div class="col-sm-1"></div>
         <div class="col-sm-10 pad center">
-            <h1>Music-Theory-Test</h1>
+            <h1>Music Theory Test</h1>
         </div>
         <div class="col-sm-1"></div>
     </div>
@@ -65,6 +73,44 @@
                 <div class="note note-black" id="note-bb"><p>Bb</p></div>
                 <div class="note note-empty"></div>
             </div>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+    <div class="row grey_text">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-3">
+            <input type="checkbox" id="include_accidentals" name="settings" value="include_accidentals">
+            <label for="include_accidentals">Include Accidentals</label><br />
+        </div>
+        <div class="col-sm-3">
+            <input type="checkbox" id="instant_fail" name="settings" value="instant_fail">
+            <label for="instant_fail">Instant Fail</label><br/>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <button class="col-sm-2 start-button" onclick="exportFile()">Export Questions</button>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-4">
+            <div class="row">
+                <button class="col-sm-12 start-button" onclick="appendQuestion('')">Append Question to File</button>
+            </div>
+            <div class="row">
+                <button class="col-sm-6 start-button" onclick="appendQuestion('stave')">Append Random Stave Question to File</button>
+                <button class="col-sm-6 start-button" onclick="appendQuestion('audio')">Append Random Audio Question to File</button>
+            </div>  
+        </div>
+        
+        <div class="col-sm-1"></div>
+        <input type="file" class="hide" id="real_import" accept=".txt">
+        <button class="col-sm-2 start-button" onclick="importFile()">Import Questions</button>
+        <div class="col-sm-1"></div>
+    </div>
+    <div class="row grey_text">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10 pad center">
+            <h2 id="expimp_message"></h1>
         </div>
         <div class="col-sm-1"></div>
     </div>

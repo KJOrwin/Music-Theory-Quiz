@@ -26,6 +26,10 @@ body {
     user-select: none;
 }
 
+.hide {
+    display: none;
+}
+
 .row {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -100,6 +104,10 @@ body {
     border-radius: 50%;
     text-align: center;
     padding: 10px;
+}
+
+.grey_text {
+    color: lightgrey;
 }
 
 p {

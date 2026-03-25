@@ -1,23 +1,24 @@
 let notes = {
-    "s": ["Cn4", "&#x2193;C", 261.63, "note-c", "c4-natural.png"],
-    "e": ["C#4", "C#", 277.18, "note-c#", "c4-sharp.png"],
-    "d": ["Dn4", "D", 293.66, "note-d", "d4-natural.png"],
-    "r": ["Eb4", "Eb", 311.13, "note-eb", "e4-flat.png"],
-    "f": ["En4", "E", 329.63, "note-e", "e4-natural.png"],
-    "g": ["Fn4", "F", 349.23, "note-f", "f4-natural.png"],
-    "y": ["F#4", "F#", 369.99, "note-f#", "f4-sharp.png"],
-    "h": ["Gn4", "G", 392, "note-g", "g4-natural.png"],
-    "u": ["Ab4", "Ab", 415.3, "note-ab", "a4-flat.png"],
-    "j": ["An4", "A", 440, "note-a", "a4-natural.png"],
-    "i": ["Bb4", "Bb", 466.16, "note-bb", "b4-flat.png"],
-    "k": ["Bn4", "B", 493.88, "note-b", "b4-natural.png"],
-    "l": ["Cn5", "&#x2191;C", 523.25, "note-C", "c5-natural.png"]
+    "s": ["Cn4", "&#x2193;C", 261.63, "note-c", "c4-natural.png", "white"],
+    "e": ["C#4", "C#", 277.18, "note-c#", "c4-sharp.png", "black"],
+    "d": ["Dn4", "D", 293.66, "note-d", "d4-natural.png", "white"],
+    "r": ["Eb4", "Eb", 311.13, "note-eb", "e4-flat.png", "black"],
+    "f": ["En4", "E", 329.63, "note-e", "e4-natural.png", "white"],
+    "g": ["Fn4", "F", 349.23, "note-f", "f4-natural.png", "white"],
+    "y": ["F#4", "F#", 369.99, "note-f#", "f4-sharp.png", "black"],
+    "h": ["Gn4", "G", 392, "note-g", "g4-natural.png", "white"],
+    "u": ["Ab4", "Ab", 415.3, "note-ab", "a4-flat.png", "black"],
+    "j": ["An4", "A", 440, "note-a", "a4-natural.png", "white"],
+    "i": ["Bb4", "Bb", 466.16, "note-bb", "b4-flat.png", "black"],
+    "k": ["Bn4", "B", 493.88, "note-b", "b4-natural.png", "white"],
+    "l": ["Cn5", "&#x2191;C", 523.25, "note-C", "c5-natural.png", "white"]
 };
 const NOTE_NAME = 0;
 const NOTE_TEXT = 1;
 const NOTE_FREQ = 2;
 const NOTE_VAR = 3;
 const NOTE_FILE = 4;
+const NOTE_COLOUR = 5;
 
 const ctx = new AudioContext();
 const osc = ctx.createOscillator();
@@ -32,6 +33,8 @@ osc.start();
 let randomNote = ""
 let randomNotes = [];
 let currentNote = 0;
+let question_type = "";
+let question_notes = "";
 
 let output = document.getElementById("notes");
 let stave = document.getElementById("stave");
@@ -42,11 +45,22 @@ let selected_key = "";
 let keyPressed = "";
 let failed = false;
 
+let export_file = ["type,notes,include_accidentals,instant_fail\n"]
+
+let include_accidentals = document.getElementById("include_accidentals");
+let instant_fail = document.getElementById("instant_fail");
+let expimp_message = document.getElementById("expimp_message");
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function staveExercise(blank) {
+    if (blank) {
+        question_type = "audio";
+    } else {
+        question_type = "stave";
+    }
     currentNote = 0;
     output.innerHTML = ""
     successText.innerHTML = ""
@@ -148,6 +162,33 @@ function playNote(gainValue, frequencyValue = -1) {
     gain.gain.cancelScheduledValues(ctx.currentTime);
     gain.gain.setValueAtTime(gain.gain.value, ctx.currentTime);
     gain.gain.linearRampToValueAtTime(gainValue, ctx.currentTime + fadeTime);
+}
+
+function appendQuestion(type) {
+    if (type != "") {
+        export_file.push(`${type},/,${include_accidentals.checked},${instant_fail.checked}\n`);
+        expimp_message.innerHTML = `Successfully appended ${type} question to file.`
+    } else {
+        question_notes = ""
+        for (i = 0; i < randomNotes.length; i++) {
+            question_notes += `${randomNotes[i]}/`;
+        }
+        question_notes = question_notes.slice(0, -1);
+        export_file.push(`${question_type},${question_notes},${include_accidentals.checked},${instant_fail.checked}\n`);
+        expimp_message.innerHTML = `Successfully appended question to file.`
+    }
+}
+
+function exportFile() {
+    let blob = new Blob(export_file, { type: "text/plain" });
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "questions.txt";
+    link.click();
+}
+
+function importFile() {
+    return;
 }
 
 document.addEventListener("keydown", () => ctx.resume(), { once: true });
