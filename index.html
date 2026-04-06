@@ -1,7 +1,5 @@
 <!--
     Add a next button beside the stave (replace hint button)
-    decipher imported file
-    make the checkboxes do stuff
     make it look good - remove testing text
     add comments
     clean up code
@@ -27,6 +25,7 @@
     </div>
     <div class="row" id="actions">
         <div class="col-sm-3"></div>
+        <div class="col-sm-1" id="question_num_text" style="display: none;">1</div>
         <div class="col-sm-6" id="stave">
             <img class="stave-elements" src="assets/images/clef-sig.png">
             <img class="stave-elements" id="n1" src="assets/images/empty-stave.png">
@@ -44,13 +43,18 @@
                 <img src="assets/images/hint-icon.png" alt="Hint">
             </button>
         </div>
+        <div class="col-sm-1" style="display: none;">
+            <button class="start-button">
+                Next -->
+            </button>
+        </div>
         <div class="col-sm-3"></div>
     </div>
     <div class="row">
         <div class="col-sm-1"></div>
-        <button class="col-sm-4 start-button" onclick="staveExercise(blank=false)">Create Random Stave</button>
+        <button class="col-sm-4 start-button" onclick="staveExercise('stave')">Create Random Stave</button>
         <div class="col-sm-2"></div>
-        <button class="col-sm-4 start-button" onclick="staveExercise(blank=true)">Create Random Audio</button>
+        <button class="col-sm-4 start-button" onclick="staveExercise('audio')">Create Random Audio</button>
         <div class="col-sm-1"></div>
     </div>
     <div class="row">
@@ -79,11 +83,11 @@
     <div class="row grey_text">
         <div class="col-sm-4"></div>
         <div class="col-sm-3">
-            <input type="checkbox" id="include_accidentals" name="settings" value="include_accidentals">
+            <input title="Questions will include sharps and flats" type="checkbox" id="include_accidentals" name="settings" value="include_accidentals" checked>
             <label for="include_accidentals">Include Accidentals</label><br />
         </div>
         <div class="col-sm-3">
-            <input type="checkbox" id="instant_fail" name="settings" value="instant_fail">
+            <input title="Question will continue when you make a mistake" type="checkbox" id="instant_fail" name="settings" value="instant_fail">
             <label for="instant_fail">Instant Fail</label><br/>
         </div>
         <div class="col-sm-4"></div>
@@ -104,7 +108,7 @@
         
         <div class="col-sm-1"></div>
         <input type="file" class="hide" id="real_import" accept=".txt">
-        <button class="col-sm-2 start-button" onclick="importFile()">Import Questions</button>
+        <button class="col-sm-2 start-button" onclick="real_import.click()">Import Questions</button>
         <div class="col-sm-1"></div>
     </div>
     <div class="row grey_text">
