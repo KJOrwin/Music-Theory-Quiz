@@ -10,6 +10,10 @@ body {
     background-image: linear-gradient(#7777ff, #7777ff, #330033);
 }
 
+p {
+    padding: 5px;
+}
+
 .pad {
     padding: 10px;
 }
@@ -42,53 +46,10 @@ body {
     float: left;
 }
 
-.note-empty {
-    position: relative;
-    z-index: 1;
-    border: 3px solid rgb(0, 0, 0, 0);
-    width: var(--black-key-width);
-    height: var(--black-key-height);
-}
-
-.stave-elements {
-    width: 20%;
-}
-
-#stave {
-    font-size: 0;
-}
-
-#keyboard {
-    position: relative;
-}
-
-#white_keys {
-    position: absolute;
-}
-
-#question_num_text {
-    display: flex;
-    border-color: black;
-    border-width: 5px;
-    border-style: solid;
-    border-radius: 25%;
-    font-size: 6vw;
-    align-items: center;
-    justify-content: center;
-}
-
 .note-white {
     background-color: white;
     width: var(--white-key-width);
     height: var(--white-key-height);
-}
-
-#black_keys {
-    display: flex;
-    justify-content: space-between;
-    margin-left: calc(var(--white-key-width) * 0.8);
-    width: calc(var(--white-key-width) * 6.4);
-    transform: translate(0%, -200%);
 }
 
 .note-black {
@@ -98,6 +59,14 @@ body {
     z-index: 1;
     background-color: black;
     color: white;
+}
+
+.note-empty {
+    position: relative;
+    z-index: 1;
+    border: 3px solid rgb(0, 0, 0, 0);
+    width: var(--black-key-width);
+    height: var(--black-key-height);
 }
 
 .start-button {
@@ -120,6 +89,37 @@ body {
     color: lightgrey;
 }
 
-p {
-    padding: 5px;
+.stave-elements {
+    width: 20%;
+}
+
+#stave {
+    font-size: 0;
+}
+
+#keyboard {
+    position: relative;
+}
+
+#white_keys {
+    position: absolute;
+}
+
+#black_keys {
+    display: flex;
+    justify-content: space-between;
+    margin-left: calc(var(--white-key-width) * 0.8);
+    width: calc(var(--white-key-width) * 6.4);
+    transform: translate(0%, -200%);
+}
+
+#question_num_text {
+    display: flex;
+    border-color: black;
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 25%;
+    font-size: 6vw;
+    align-items: center;
+    justify-content: center;
 }

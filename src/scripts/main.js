@@ -1,3 +1,4 @@
+// Notes database {<input_key>: [<actual_note_name>, <visible_note_name>, <frequency_of_note>, <html_id_of_note>, <file_name_of_note>, <colour_of_note>]}
 let notes = {
     "s": ["Cn4", "&#x2193;C", 261.63, "note-c", "c4-natural.png", "white"],
     "e": ["C#4", "C#", 277.18, "note-c#", "c4-sharp.png", "black"],
@@ -13,6 +14,7 @@ let notes = {
     "k": ["Bn4", "B", 493.88, "note-b", "b4-natural.png", "white"],
     "l": ["Cn5", "&#x2191;C", 523.25, "note-C", "c5-natural.png", "white"]
 };
+// Pointers to parts of the database for each note
 const NOTE_NAME = 0;
 const NOTE_TEXT = 1;
 const NOTE_FREQ = 2;
@@ -20,11 +22,13 @@ const NOTE_VAR = 3;
 const NOTE_FILE = 4;
 const NOTE_COLOUR = 5;
 
+// Bootstrap column values for the action bar
 const ACT_STAVE = [3, 0, 6, 0, 0, 0, 3];
 const ACT_AUDIO = [2, 0, 6, 1, 1, 0, 2];
 const ACT_STAVEI = [2, 1, 6, 0, 0, 1, 2];
 const ACT_AUDIOI = [1, 1, 6, 1, 1, 1, 1];
 
+// Audio controller
 const ctx = new AudioContext();
 const osc = ctx.createOscillator();
 const gain = ctx.createGain()
@@ -35,28 +39,38 @@ gain.gain.value = 0;
 osc.connect(gain).connect(ctx.destination);
 osc.start();
 
+// Question creation variables
 let randomNote = ""
 let randomNotes = [];
 let currentNote = 0;
 
-let current_question = [];
-let imported = false;
-let question_num = 0;
-let question_type = "";
-let question_notes = "";
-
-let output = document.getElementById("notes");
-let stave = document.getElementById("stave");
-let actions = document.getElementById("actions");
-let successText = document.getElementById("success");
-
+// Question management variables
 let selected_key = "";
 let keyPressed = "";
 // 0 = Not failed; 1 = Failed but instant_fail is OFF; 2 = Failed and instant_fail is ON
 let failed = 0;
-
-let export_file = ["type,notes,include_accidentals,instant_fail\n"]
 let correct_answers = 0;
+
+// Get HTML elements
+let stave = document.getElementById("stave");
+let actions = document.getElementById("actions");
+let question_num_text = document.getElementById("question_num_text");
+let include_accidentals = document.getElementById("include_accidentals");
+let instant_fail = document.getElementById("instant_fail");
+// These commented elements are kept for testing but not used in the final product
+// let output = document.getElementById("notes");
+// let successText = document.getElementById("success");
+let expimp_message = document.getElementById("expimp_message");
+
+// Export variables
+let export_file = ["type,notes,include_accidentals,instant_fail\n"]
+
+// Import variables and File Import
+let imported = false;
+let current_question = [];
+let question_num = 0;
+let question_type = "";
+let question_notes = "";
 
 let real_import = document.getElementById("real_import");
 let import_file = []
@@ -66,19 +80,12 @@ reader.onload = () => {
     importFile();
 }
 
-let question_num_text = document.getElementById("question_num_text");
-let include_accidentals = document.getElementById("include_accidentals");
-let instant_fail = document.getElementById("instant_fail");
-let expimp_message = document.getElementById("expimp_message");
-
+// In built wait function
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function exerciseManager() {
-
-}
-
+// Resets parameters for a new question
 function staveExercise(type) {
     if (imported == true) {
         if (confirm("Creating a new question will override the questions that you have imported. Are you sure you want to proceed?")) {
@@ -91,8 +98,8 @@ function staveExercise(type) {
     }
     question_type = type;
     currentNote = 0;
-    output.innerHTML = ""
-    successText.innerHTML = ""
+    // output.innerHTML = ""
+    // successText.innerHTML = ""
     failed = 0;
     randomQuestion();
     loadStave();
@@ -108,11 +115,12 @@ function randomQuestion() {
             }
         }
         randomNotes[i] = randomNote;
-        output.innerHTML += notes[randomNote][NOTE_TEXT]
-        if (i != 3) { output.innerHTML += ", " }
+        // output.innerHTML += notes[randomNote][NOTE_TEXT]
+        // if (i != 3) { output.innerHTML += ", " }
     }
 }
 
+// Loads question onto the stave
 function loadStave() {
     while (stave.hasChildNodes()) {
         stave.removeChild(stave.firstChild);
@@ -147,6 +155,7 @@ function loadStave() {
 // This varaible is only used for error checking in the next function
 let totalColsActions = 0;
 
+// Adjusts the width and visibilty of elements in the action bar
 function changeActions(colWidth) {
     /*
         --- actions.children ---
@@ -178,7 +187,9 @@ function changeActions(colWidth) {
     }
 }
 
+// Gets the file path of the note images
 function getFilePath(file_name) {
+    // Use notes without accidentals if all notes are natural
     if (include_accidentals.checked) {
         return "assets/images/" + file_name;
     } else {
@@ -186,6 +197,7 @@ function getFilePath(file_name) {
     }
 }
 
+// Plays the 4 notes in the exercise. Used for the Audio Exercise.
 async function playAudio() {
     for (let i = 0; i < randomNotes.length; i++) {
         console.log(notes[randomNotes[i]][NOTE_FREQ])
@@ -196,14 +208,16 @@ async function playAudio() {
     }
 }
 
+// Reveals the next note in the exercise. Used for the Audio Exercise.
 function hint() {
     let note = document.getElementById("n" + String(currentNote + 1));    
-    successText.innerHTML += "Hint <br/>";
+    // successText.innerHTML += "Hint <br/>";
     note.src = getFilePath(notes[randomNotes[currentNote]][NOTE_FILE]);
     stave.children[currentNote + 1].style.backgroundColor = "#ffeecc";
     currentNote++;
 }
 
+// Keyboard input
 function pressKey(key) {
     let note = document.getElementById("n" + String(currentNote + 1));
     if (notes[key] != undefined && !keyPressed) {
@@ -213,14 +227,16 @@ function pressKey(key) {
         playNote(1, notes[key][NOTE_FREQ]);
         if (failed < 2 && randomNotes[0] && currentNote < 4) {
             if (key == randomNotes[currentNote]) {
-                successText.innerHTML += "Success <br/>";
+                // Correct answer
+                // successText.innerHTML += "Success <br/>";
                 note.src = getFilePath(notes[randomNotes[currentNote]][NOTE_FILE]);
                 stave.children[currentNote + 1].style.backgroundColor = "#ddffdd";
             } else {
-                successText.innerHTML += "Fail <br/>";
+                // Incorrect answer
+                // successText.innerHTML += "Fail <br/>";
                 note.src = getFilePath(notes[randomNotes[currentNote]][NOTE_FILE]);
                 stave.children[currentNote + 1].style.backgroundColor = "#ffdddd";
-                successText.innerHTML += "<br/>You Lose!<br/>";
+                // successText.innerHTML += "<br/>You Lose!<br/>";
                 failed = 1;
                 if (instant_fail.checked == true) {
                     failed = 2;
@@ -228,7 +244,8 @@ function pressKey(key) {
             }
 
             if (currentNote == 3 && failed < 2) {
-                successText.innerHTML += "<br/>You Win!<br/>";
+                // Completed question
+                // successText.innerHTML += "<br/>You Win!<br/>";
                 if (imported && failed == 0) {
                     correct_answers++;
                 }
@@ -238,6 +255,7 @@ function pressKey(key) {
     }
 }
 
+// Outputs the audio of the note played using an oscillator.
 function playNote(gainValue, frequencyValue = -1) {
     if (frequencyValue != -1) {
         osc.frequency.value = frequencyValue;
@@ -247,11 +265,12 @@ function playNote(gainValue, frequencyValue = -1) {
     gain.gain.linearRampToValueAtTime(gainValue, ctx.currentTime + fadeTime);
 }
 
+// Switches question if a set of questions has been imported
 function nextQuestion() {
     question_num++;
     current_question = import_file[question_num].split(",");
     if (current_question.length == 1) {
-        alert(`You have reached the end of the questions and got a score of ${correct_answers}/${import_file.length - 1}`)
+        alert(`You have reached the end of the questions and got a score of ${correct_answers}/${import_file.length - 2}`)
         changeActions(ACT_STAVE);
         // change the stave
         return;
@@ -267,6 +286,7 @@ function nextQuestion() {
     loadStave();
 }
 
+// Adds question to an exportable file
 function appendQuestion(type) {
     if (type != "") {
         export_file.push(`${type},,${include_accidentals.checked},${instant_fail.checked}\n`);
@@ -282,6 +302,7 @@ function appendQuestion(type) {
     }
 }
 
+// Exports quiz file onto the user's computer
 function exportFile() {
     let blob = new Blob(export_file, { type: "text/plain" });
     let link = document.createElement("a");
@@ -290,6 +311,7 @@ function exportFile() {
     link.click();
 }
 
+// Imports quiz file from the user's computer
 function importFile() {
     imported = true;
     correct_answers = 0;
@@ -298,13 +320,19 @@ function importFile() {
     instant_fail.disabled = true;
 }
 
+// Enables the audio controller and oscillator .
 document.addEventListener("keydown", () => ctx.resume(), { once: true });
 
+// Checks for key presses.
 document.addEventListener("keydown", (event) => pressKey(event.key));
 
+// Checks for key releases.
 document.addEventListener("keyup", (event) => {
+    // Ensure the key released is the same as the one previously pressed.
     if (event.key == selected_key) {
+        // Stop playing the note.
         playNote(0);
+        // Revert music keyboard colour changes.
         if (keyPressed == "rgb(255, 255, 255)") {
             document.getElementById(notes[event.key][NOTE_VAR]).style.backgroundColor = "#ffffff";
         } else if (keyPressed == "rgb(0, 0, 0)") {
@@ -315,6 +343,7 @@ document.addEventListener("keyup", (event) => {
     }
 });
 
+// Check for files being imported
 real_import.addEventListener("click", () => {
     real_import.value = "";
 })
@@ -323,6 +352,7 @@ real_import.addEventListener("change", () => {
     reader.readAsText(real_import.files[0]);
 });
 
+// Change checkbox hint text based on if the checkbox is checked or not.
 include_accidentals.addEventListener("change", () => {
     if (include_accidentals.checked) {
         include_accidentals.title = "Questions will include sharps and flats"
